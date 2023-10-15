@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            background: radial-gradient(circle, rgba(238,174,203,0.7596288515406162) 0%, rgba(183,148,233,1) 100%);
+        }
+
+        .container {
+            padding: 30px;
+            border: 2px dashed palevioletred;
+            border-radius: 8px;
+            box-shadow: 5px 4px 50px black;
+            background-color: transparent;
+            backdrop-filter: blur(50px);
+        }
+
+        label {
+            color: white;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .head {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            border-bottom: 1px solid;
+        }
+
+        .body {
+            padding: 15px;
+        }
+
+        input {
+            width: 100%;
+            border-radius: 8px;
+            padding: 5px;
+            padding-left: 10px;
+        }
+
+        input[type="checkbox"]{
+            width: 17px;
+            height: 17px;
+        }
+
+        .mt {
+            margin-top: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 7px;
+            border-radius: 8px;
+            background-color: rgb(69, 117, 117);
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: aliceblue;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .signup a{
+            float: right;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="head">
+            <h1>Login Page</h1>
+        </div>
+        <hr>
+        <div  class="body">
+        <div> 
+            <div>
+                <label for="email">Email</label>
+                <input type="email" id="email">
+            </div>
+        </div>
+        <div class="mt">
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password">
+            </div>
+        </div>
+        <div class="mt checkbox">
+            <input type="checkbox" id="rememberMe">
+            <label for="rememberMe">Remember Me</label>
+        </div>
+        <div class="mt signup">
+            <button>Sign In</button>
+        </div>
+        <div>
+            <a href="#">Haven't you're account? Sign up.</a>
+        </div>
+        </div>
+    </div>
+</body>
+</html>
