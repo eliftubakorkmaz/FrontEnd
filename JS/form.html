@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form JS</title>
+</head>
+<body>
+    <form onsubmit="save(event)">
+        <input required minlength="3">
+        <button type="submit">Save</button>
+    </form>
+
+    <hr>
+
+    <ul id="list"></ul>
+
+    <script>
+        const liste = [];
+        let number = 0;
+
+        function deleteElement(id){
+            document.getElementById(id).remove();
+        }
+
+        function changeElementColor(id){
+            let element = document.getElementById("id");
+
+            if (element.style.color === "red"){
+                element.style.color = "black"
+            } else {
+                element.style.color = "red"
+            }
+        }
+
+        function save(event){
+            event.preventDefault();
+            const inputElement = document.querySelector("input");
+
+            const ulElement = document.getElementById("list");
+            ulElement.innerHTML += `
+            <li id = 'li${number}'>
+                ${inputElement.value}
+                <button onclick='changeElementColor("li${number}")'>Rengi Değiştir</button>
+                <button onclick='deleteElement("li${number}")'>Sil</button>
+            </li>
+            `
+
+            number++;
+
+            // const liElement = document.createElement("li");
+            // liElement.innerText = inputElement.value
+
+            // ulElement.append(liElement);
+
+            // const ulElement = document.getElementById("list");
+            //const inputElement = document.querySelector("input");
+
+            inputElement.Value = "";
+            inputElement.focus();
+        }
+
+        // function writeToConsoleInputValue(event){
+        //     event.preventDefault(); //form elementine özgü.Formun tetiklenmede yenilenmesini ekler.
+        //     //console.log(event)
+        //     const element = document.querySelector("input")
+        //     console.log(element.value);
+        // }
+    </script>
+</body>
+</html>

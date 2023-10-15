@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyup Example</title>
+    <style>
+        input {
+            width: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <input onkeyup="moveToNextInput(event)" id="i1">
+    <input onkeyup="moveToNextInput(event)" id="i2">
+    <input onkeyup="moveToNextInput(event)" id="i3">
+    <input onkeyup="moveToNextInput(event)" id="i4">
+    <input onkeyup="moveToNextInput(event)" id="i5">
+
+    <script>
+        document.getElementById("i1").focus().select();
+        function moveToNextInput(event){
+            let id = event.target.id;
+            id = +id.toString().replace("i", "");
+            id ++;
+
+            if (id === 6)  id = 1;
+            const element = document.getElementById("i" + id);
+            element.focus();
+            element.select();
+
+            // if (id === "i1") {
+            //     const el = document.getElementById("i2");
+            //     el.focus();
+            // } else if (id === "i2"){
+            //     const el = document.getElementById("i3");
+            //     el.focus();
+            // } else if (id === "i3") {
+            //     const el = document.getElementById("i4");
+            //     el.focus();
+            // } else if (id === "i4") {
+            //     const el = document.getElementById("i5");
+            //     el.focus();
+            // } else if (id === "i5") {
+            //     const el = document.getElementById("i1");
+            //     el.focus();
+            //     el.select();
+            // }
+        }
+    </script>
+</body>
+</html>
