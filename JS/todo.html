@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App</title>
+    <title>Todo App</title> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js"></script> 
 </head>
 <body>
     <div id="addForm">
@@ -19,16 +18,55 @@
     <ul id="todo-list">
     </ul>
 
+    <!-- 
+        Api isteği yöntemleri
+        1) Fetch => JavaScript tarafından verilen default Api isteği yöntemidir
+        2) Axios => Ekstra bir kütüphane ile kullanabileceğimiz Api isteği yöntemidir
+        3) JQuery Ajax => Ekstra bir kütüphane ile kullanabileceğimiz Api isteği yöntemidir
+     -->
 
     <script>
-        const todos = [];
+        let todos = [];
         let isUpdateFormActive = true;
         let index = 0;
+        let id = 0;
 
         showTrueForm();
+        getTodoListFromApi();
+
+        function getTodoListFromApi(){
+            // fetch("http://localhost:5000/api/todos")
+            //     .then(res=> res.json())
+            //     .then(data => {
+            //         console.log(data);
+            //         todos = data;
+            //         setULList();
+            //     });
+
+            axios.get("http://localhost:5000/api/todos")
+            .then(res=> {
+                todos = res.data;
+                setULList();
+            });
+        }
+
+        function deleteTodoFromApi(id){
+            // fetch("http://localhost:5000/api/todos/remove/" + id,{
+            //     method: "DELETE",                
+            // })
+            // .then(res=> res.json())
+            // .then(data=> {
+            //     console.log(data);
+            //     getTodoListFromApi();
+            // })
+
+            axios.get("http://localhost:5000/api/todos/remove/" + id)
+            .then(data => {
+                getTodoListFromApi();
+            })
+        }       
 
         function showTrueForm(){
-
             isUpdateFormActive = !isUpdateFormActive;
 
             const addFormEl = document.getElementById("addForm");
@@ -39,43 +77,61 @@
                 addFormEl.style.display = "none";
                 updateFormEl.style.display = "block";
 
-                for (let el of operationsEl){
-                    el.style.display = "none";
+                for(let el of operationsEl){
+                    el.style.display = "none"
                 }
-            }else {
+
+            }else{
                 addFormEl.style.display = "block";
                 updateFormEl.style.display = "none";
-
-                for (let el of operationsEl){
-                    el.style.display = "block";
+                
+                for(let el of operationsEl){
+                    el.style.display = "block"
                 }
             }
         }
 
         function save(){
             const inputElement = document.getElementById("work");
-            todos.push(inputElement.value);
+            const value = inputElement.value;
 
-            setUlList();
+            // fetch("http://localhost:5000/api/todos/create",{
+            //     headers: {
+            //         "Content-Type":"application/json"
+            //     },
+            //     method: "POST",
+            //     body: JSON.stringify({title: value})
+            // })
+            // .then(res=> res.json())
+            // .then(data => {
+            //     getTodoListFromApi();
+                
+            //     inputElement.value = "";
+            //     inputElement.focus();
+            // });
 
-            inputElement.value = "";
-            inputElement.focus();
-        }
+            axios.post("http://localhost:5000/api/todos/create",{title: value})
+            .then(res=> {
+                getTodoListFromApi();
+                inputElement.value = "";
+                inputElement.focus();
+            });
+    }
 
-        const deleteTodo = (index) => {
+        const deleteTodo = (index) =>{
             todos.splice(index,1);
-            setUlList();
+            setULList();
         }
 
-        function setUlList(){
+        function setULList(){
             let text = "";
-            for (let i in todos){
+            for(let i in todos){
                 const value = todos[i];
-                text +=
-                `<li>${value}</li>
+                text += `
+                <li>${value.title}</li>
                 <div class="operations">
-                <button onclick="get(${i})">Update</button> 
-                <button onclick="deleteTodo(${i})">Delete</button>
+                <button onclick="get(${i})">Update</button>
+                <button onclick="deleteTodoFromApi(${value.id})">Delete</button>
                 </div>`
             }
 
@@ -85,16 +141,20 @@
 
         const updateWorkEl = document.querySelector("#updateWork");
 
-        function get(i){ 
+        function get(i){
             showTrueForm();
-            updateWorkEl.value = todos[i];
+            updateWorkEl.value = todos[i].title;
             index = i;
+            id = todos[i].id;
         }
 
         function update(){
-            todos[index] = updateWorkEl.value;
-            showTrueForm();
-            setUlList();
+            const value = updateWorkEl.value;
+            axios.post("http://localhost:5000/api/todos/update",{id: id, title: value})
+            .then(res=> {
+                showTrueForm();
+                getTodoListFromApi();
+            });
         }
 
         function cancel(){
