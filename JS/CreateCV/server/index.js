@@ -199,6 +199,4 @@ app.post("/api/set", async(req,res)=> {
     res.json({message: "Update is successful"})
 });
 
-const port = process.env.PORT || 5000;
-
-app.listen(port, ()=> console.log("Uygulama ayakta: " + port));
+app.listen(5000, ()=> console.log("Uygulama ayakta http://localhost:5000 üzerinden ayakta"));
