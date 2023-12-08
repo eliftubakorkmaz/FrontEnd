@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+    <h1>Todo App With Qquery</h1>
+    <input type="text">
+    <button>Save</button>
+    <ul>
+
+    </ul>
+    <script>
+        $(document).ready(function(){
+            getAll();
+            function getAll(){
+                $.ajax({
+                    url: "http://localhost:3200/api/getAll",
+                    method: "GET",
+                    success: function(res){
+                        let text = "";
+                        for(let r of res){
+                            text += `<li>${r.title}</li>`
+                        }
+                        $("ul").html(text);
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                })
+            }
+
+            $("button").on("click", function(){
+                const value = $("input").val();
+                $.ajax({
+                    url: "http://localhost:3200/api/create",
+                    data: JSON.stringify({title: value}),
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    success: function(){
+                        getAll();
+                        $("input").val("");
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+</html>

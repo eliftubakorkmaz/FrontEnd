@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <input type="text">
+    <button id="show">Göster</button>
+    <button id="hide">Gizle</button>
+    <h1 id="hello">Merhaba</h1>
+    <div>
+        <p>Lorem</p>
+    </div>
+    <script>
+        $(document).ready(function(){
+            //Tüm Jquery kodları buraya yazılmalı
+
+            $("div p").text("Deneme");
+            $("input").html("deneme");
+            $("input").val("asdaa");
+            $("div").attr("name", "asadas");
+
+            // $("div").animate({left: '200px', width: '200px'}, 2000);
+
+            // $("#show").on("click", function(){
+            //     $("#hello").show();
+            //     $("div p").show();
+            // });
+
+            // $("#hide").on("click", function(){
+            //     $("#hello").hide();
+            //     $("div p").hide();
+            // });
+
+            // $("button").click(function(){
+            //     alert("Tıklandım!");
+            // });
+
+            // $("input").on("keyup", function(e){
+            //     console.log(e.target.value);
+            // });
+
+        });
+    </script>
+</body>
+</html>
