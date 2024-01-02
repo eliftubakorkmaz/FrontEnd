@@ -126,3 +126,24 @@ const colorReactangle: ColorReactangle = {
 //union | (OR)
 let newVariable: string | undefined | number | boolean;
 const newVariable2: string | undefined = undefined;
+
+//fonksiyonlar
+
+function getTime(): number{
+    return new Date().getTime();
+}
+
+function printHello(): void{
+    console.log("İşlem tamamlandı")
+}
+
+function multiply(a:number, b:number, c:number = 10, d?:number): number{
+    return a * b;
+}
+
+type User2 = (value: number) => number;
+
+const userFunction: User2 = (value) => value * -1;
+
+let x: unknown = "Hello Word";
+console.log((x as string).length);
