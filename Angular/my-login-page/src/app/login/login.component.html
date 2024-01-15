@@ -1,0 +1,41 @@
+<div style="height: 100vh;" class="d-flex justify-content-center align-items-center">
+    <div class="col-xl-6 col-12">
+        <div class="card">
+            <div class="card-header">
+                <h1>Login Page</h1>
+                <p>Please enter your login information</p>
+                <div class="card-body">
+                    <form #loginForm="ngForm" (ngSubmit)="signIn(loginForm)" autocomplete="off">
+                        <div class="form-group">
+                            <label for="userNameOrEmail">Username or Email</label>
+                            <input validate required minlength="3" type="text" id="userNameOrEmail" class="form-control" ngModel name="userNameOrEmail">
+                            <div class="invalid-feedback">
+                                Username or email must be valid
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input (focus)="isPasswordFocus = true" (keyup)="checkRegexPatternOrPassword(password)" validate required minlength="6" type="password" class="form-control" ngModel name="password" #password>
+                            <div class="invalid-feedback">
+                                Password must be valid
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <button type="submit" class="btn btn-outline-success w-100">
+                                <i class="fa-solid fa-lock"></i>
+                                Sign In
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <ul [ngStyle]="{'display': isPasswordFocus ? 'block' : 'none'}" class="password-ul">
+                    <li class="pw-error" id="minSixCharacter">En az 6 karakter</li>
+                    <li class="pw-error" id="upperLetter">Büyük Harf</li>
+                    <li class="pw-error" id="lowerLetter">Küçük Harf</li>
+                    <li class="pw-error" id="specialLetter">Özel Karakter</li>
+                    <li class="pw-error" id="numeraticLetter">Sayı</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+.card {
+    box-shadow: 5px 5px 5px rgb(194, 209, 194);
+}
+
+.password-ul li{
+ font-size: 13px;   
+}
+
+.pw-success {
+    color: green;
+    text-decoration: line-through;
+}
+
+.pw-error {
+    color: red;
+    text-decoration: none;
+}
+
+.card-header h1, .card-header p {
+    text-align: center;
+}
+
+.card-header p {
+    color: darkgreen;
+    text-decoration: underline;
+}
