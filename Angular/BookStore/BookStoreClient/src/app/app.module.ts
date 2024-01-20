@@ -9,6 +9,8 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { FormsModule } from '@angular/forms';
+import { CategoryPipe } from './pipes/category.pipe';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -19,11 +21,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     LayoutsComponent,
     HomeComponent,
-    NavbarComponent
+    NavbarComponent,
+    CategoryPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
