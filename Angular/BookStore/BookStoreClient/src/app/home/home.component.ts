@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { RequestModel } from '../models/request.model';
 import { BookModel } from '../models/book.model';
+import { ShoppingCartService } from '../services/shopping-cart.service';
 
 @Component({
   selector: 'app-home',
@@ -16,9 +17,18 @@ export class HomeComponent {
   searchCategories: string = "";
   newData: any[] = []
 
-  constructor(private http: HttpClient){
+  constructor(
+    private http: HttpClient,
+    private shopping: ShoppingCartService
+    ){
     //this.getAll();
     this.getCategories();
+  }
+
+  addShoppingCart(book: BookModel){
+    this.shopping.shoppingCarts.push(book);
+    localStorage.setItem("shoppingCarts",JSON.stringify(this.shopping.shoppingCarts));
+    this.shopping.count++;
   }
 
   feedData(){
@@ -35,14 +45,14 @@ export class HomeComponent {
 
   getAll(){
     this.http
-    .post<BookModel[]>(`https://localhost:7231/api/Books/GetAll/`, this.request)
+    .post<BookModel[]>(`http://localhost:5051/api/Books/GetAll`, this.request)
     .subscribe(res => {
       this.books = res;
     })
   }
 
   getCategories(){
-    this.http.get("https://localhost:7231/api/Categories/GetAll")
+    this.http.get("http://localhost:5051/api/Categories/GetAll")
     .subscribe(res => this.categories = res);
     this.getAll();
   }

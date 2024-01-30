@@ -19,6 +19,8 @@ public sealed class AppDbContext : DbContext
 
   public DbSet<BookCategory> BookCategories { get; set; }
 
+  public DbSet<Order> Orders { get; set; }
+
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<Book>().OwnsOne(p => p.Price, price =>
@@ -26,6 +28,13 @@ public sealed class AppDbContext : DbContext
       price.Property(p => p.Value).HasColumnType("money");
       price.Property(p => p.Currency).HasMaxLength(5);
     });
+
+    modelBuilder.Entity<Order>().OwnsOne(p => p.Price, price =>
+    {
+      price.Property(p => p.Value).HasColumnType("money");
+      price.Property(p => p.Currency).HasMaxLength(5);
+    });
+
     modelBuilder.Entity<BookCategory>().HasKey(p => new { p.BookId, p.CategoryId });
     //Composite Key
 

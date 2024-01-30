@@ -12,6 +12,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { FormsModule } from '@angular/forms';
 import { CategoryPipe } from './pipes/category.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { IconControlDirective } from './directives/icon-control.directive';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
+import { TrCurrencyPipe } from 'tr-currency';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -23,12 +26,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     LayoutsComponent,
     HomeComponent,
     NavbarComponent,
-    CategoryPipe
+    CategoryPipe,
+    IconControlDirective,
+    ShoppingCartComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     InfiniteScrollModule,
+    TrCurrencyPipe,
     FormsModule,
     HttpClientModule,
     TranslateModule.forRoot({

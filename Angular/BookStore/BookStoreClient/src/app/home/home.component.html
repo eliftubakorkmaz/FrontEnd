@@ -28,7 +28,7 @@
               </div>
                 <ul class="categories">
                   <li class="category" (click)="changeCategory(null)" [ngClass]="request.categoryId === null ? 'active' : ''">{{ 'All Categories' | translate}}</li>
-                  <li class="category" (click)="changeCategory(c.id)" [ngClass]="request.categoryId === c.id ? 'active' : ''" *ngFor="let c of categories | categoryPipe: searchCategories">{{c.name}}</li>
+                  <li class="category" (click)="changeCategory(c.id)" [ngClass]="request.categoryId === c.id ? 'active' : ''" *ngFor="let c of categories | categoryPipe: searchCategories">{{c.name |  translate}}</li>
                 </ul>
             </div>
         </div>
@@ -52,12 +52,12 @@
                 <img [src]="b.coverImageUrl" class="card-img-top mt-2" alt="...">
               </div>
                 <div class="card text-center">
-                    <h5 class="card-title">{{ b.title }}</h5>
+                    <h5 #title id="title" class="card-title">{{ b.title }}</h5>
                     <p>{{ b.author }}</p>
                     <div class="card-body">
                       <p class="card-text">{{ b.summary }}</p>
-                      <button class="btn btn-outline-secondary d-flex justify-content-between w-100 align-items">
-                        <span>{{b.price.value}} {{b.price.currency}}</span>
+                      <button iconControl class="btn btn-outline-secondary d-flex justify-content-between w-100 align-items-center" (click)="addShoppingCart(b)">
+                        <span>{{b.price.value | trCurrency}} {{b.price.currency}}</span>
                         <i class="fa-solid fa-cart-shopping"></i>
                       </button>
                     </div>

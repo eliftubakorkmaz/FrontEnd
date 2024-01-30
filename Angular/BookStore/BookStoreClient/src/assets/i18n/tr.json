@@ -4,5 +4,7 @@
     "Home Page": "Anasayfa",
     "Elo Book Store": "Elo Kitap Dükkanı",
     "Search": "Aranacak değeri giriniz...",
-    "All Categories": "Tüm Kategoriler"
+    "All Categories": "Tüm Kategoriler",
+    "shoppingCartPage": "Sepetim",
+    "noBooksInShoppingCart": "Sepette ürününüz bulunmuyor!"
 }

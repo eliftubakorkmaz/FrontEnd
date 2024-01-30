@@ -1,0 +1,50 @@
+li {
+    cursor: pointer;
+}
+
+li:hover {
+    color: aqua;
+}
+
+ul {
+    margin-top: 7px;
+}
+
+.card {
+    padding: 10px;
+}
+
+.card-image {
+    max-height: 150px;
+}
+
+.trash {
+    position: absolute;
+    left: 900px;
+    cursor: pointer;
+}
+
+.trash:hover {
+    color: red;
+}
+
+@media screen and (max-width: 1200px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .col-lg-9 {
+        width: 74%;
+    }
+}
+
+@media screen and (max-width: 990px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .col-lg-9 {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
