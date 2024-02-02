@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-lg bg-success-subtle bg-gradient bg-opacity-75">
+    <div class="container-fluid">
+      <a class="navbar-brand fs-4" routerLink="/">{{ 'Elo Book Store' | translate }}</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <!-- <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/"> {{ 'Home' | translate }}</a>
+          </li> -->
+        </ul>
+        <select class="btn btn-outline-light btn-sm text-dark" (change)="switchLanguage($event)">
+          <option value="en">English</option>
+          <option value="tr">Türkçe</option>
+        </select>
+        <button routerLink="/shopping-cart" class="btn btn-outline-light btn-sm text-dark ms-3">
+          <i class="fa-solid fa-cart-shopping" [ngClass]="shopping.shoppingCarts.length > 0 ? 'fa-bounce' : ''"></i>
+          <span *ngIf="shopping.shoppingCarts.length > 0" class="position-absolute translate-middle badge rounded-pill bg-danger" style="top: 42px;right: 25px;">
+            {{shopping.count}}
+            <span class="visually-hidden">unread messages</span>
+          </span>
+        </button>
+        <button *ngIf="!auth.isAuthentication()" class="btn btn-outline-light ms-2" routerLink="/login">
+          <i class="fa-solid fa-user-lock"></i>
+        </button>
+        <div class="dropdown ms-4" *ngIf="auth.isAuthentication()">
+          <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img width="30" src="https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Clipart.png" alt="">
+            {{auth.userName}}
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Profilim</a></li>
+            <li><a class="dropdown-item" href="#" (click)="logout()">Çıkış Yap</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>

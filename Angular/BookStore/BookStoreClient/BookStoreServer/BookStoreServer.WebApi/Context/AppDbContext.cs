@@ -11,7 +11,7 @@ public sealed class AppDbContext : DbContext
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
     optionsBuilder.UseSqlServer("Data Source = ETUBAS; Initial Catalog = YMYP_BookStoreDb; Integrated Security = True; Connect Timeout = 30; Encrypt = True; Trust Server Certificate = True; Application Intent = ReadWrite; Multi Subnet Failover = False");
-    
+    //optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=admin;Database=BookStoreDb;").UseSnakeCaseNamingConvention();
   }
   public DbSet<Category> Categories { get; set; }
 
@@ -21,8 +21,19 @@ public sealed class AppDbContext : DbContext
 
   public DbSet<Order> Orders { get; set; }
 
+  public DbSet<OrderStatus> OrderStatuses { get; set; }
+
+  public DbSet<User> Users { get; set; }
+
+  public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
+    modelBuilder.Entity<User>().HasIndex(p => p.Email).IsUnique();
+    modelBuilder.Entity<User>().HasIndex(p => p.Username).IsUnique();
+
+    modelBuilder.Entity<OrderStatus>().HasIndex(p => new { p.Status, p.OrderNumber }).IsUnique();
+
     modelBuilder.Entity<Book>().OwnsOne(p => p.Price, price =>
     {
       price.Property(p => p.Value).HasColumnType("money");
@@ -30,6 +41,12 @@ public sealed class AppDbContext : DbContext
     });
 
     modelBuilder.Entity<Order>().OwnsOne(p => p.Price, price =>
+    {
+      price.Property(p => p.Value).HasColumnType("money");
+      price.Property(p => p.Currency).HasMaxLength(5);
+    });
+
+    modelBuilder.Entity<ShoppingCart>().OwnsOne(p => p.Price, price =>
     {
       price.Property(p => p.Value).HasColumnType("money");
       price.Property(p => p.Currency).HasMaxLength(5);

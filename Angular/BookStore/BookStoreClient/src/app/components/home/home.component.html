@@ -1,0 +1,140 @@
+<div class="card mt-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>{{ 'Home Page' | translate}}</h5>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a routerLink="/">{{ 'Home' | translate}}</a></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Loading -->
+<div class="row mt-4" *ngIf="isLoading">
+  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="card">
+          <div class="card-header">
+              <h6> {{ 'Categories' | translate }}</h6>
+          </div>
+          <div class="card-body">
+            <div class="input-group">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input 
+              [(ngModel)]="searchCategories"
+              type="search" 
+              class="form-control"
+              placeholder=" {{ 'Search' | translate}}">
+            </div>
+              <ul class="categories">
+                <li class="category loader-category" *ngFor="let l of loaderDatas"></li>
+              </ul>
+          </div>
+      </div>
+  </div>
+  <div class="col-lg-9 col-md-8 col-sm-6 col-12">
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon1">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+        <input
+        [(ngModel)]="request.search"
+        (keydown.enter)="getAll()"
+        (search)="getAll()"
+        type="search" 
+        class="form-control" 
+        placeholder=" {{ 'Search' | translate}}">
+      </div>
+      <div class="row">
+          <div class="col-xl-4 col-md-6 col-12 mt-3" *ngFor="let l of loaderDatas">
+            <div class="card-body">
+              <img class="card-img-top mt-2 loading-img" alt="...">
+            </div>
+            <div class="card-header placeholder-glow">
+              <h5 class="card-title placeholder-glow">
+                <span class="placeholder col-6"></span>
+              </h5>
+              <p class="card-text placeholder-glow">
+              </p>
+              <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+            </div>
+            <div class="card-body placeholder-glow">
+              <p class="card-text"></p>
+                <button disabled iconControl class="btn btn-outline-secondary d-flex justify-content-between w-100 align-items-center loading-img">
+                  <span></span>
+                  <i class="fa-solid fa-cart-shopping"></i>
+                </button>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<div class="row mt-4"  *ngIf="!isLoading">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <div class="card">
+            <div class="card-header">
+                <h6> {{ 'Categories' | translate }}</h6>
+            </div>
+            <div class="card-body">
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input 
+                [(ngModel)]="searchCategories"
+                type="search" 
+                class="form-control"
+                placeholder=" {{ 'Search' | translate}}">
+              </div>
+                <ul class="categories">
+                  <li class="category" (click)="changeCategory(null)" [ngClass]="request.categoryId === null ? 'active' : ''">{{ 'All Categories' | translate}}</li>
+                  <li class="category" (click)="changeCategory(c.id)" [ngClass]="request.categoryId === c.id ? 'active' : ''" *ngFor="let c of categories | categoryPipe: searchCategories">{{c.name |  translate}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 col-md-8 col-sm-6 col-12">
+        <div class="input-group">
+          <span class="input-group-text" id="basic-addon1">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </span>
+          <input
+          [(ngModel)]="request.search"
+          (keydown.enter)="getAll()"
+          (search)="getAll()"
+          type="search" 
+          class="form-control" 
+          placeholder=" {{ 'Search' | translate}}">
+        </div>
+        <div class="row">
+            <div class="col-xl-4 col-md-6 col-12 mb-3" zoom *ngFor="let b of books">
+              <div class="card text-center">
+                <div class="card-body">
+                  <img [src]="b.coverImageUrl" class="card-img-top mt-2" alt="...">
+                </div>
+                <div class="card-header text-center">
+                      <h5 #title id="title" class="card-title">{{ b.title }}</h5>
+                      <p>{{ b.author }}</p>
+                      <div class="card-body">
+                        <ul>
+                          <li *ngFor="let category of b.categories">
+                            {{category}}
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="card-body detail">
+                        <p class="card-text">{{ b.summary }}</p>
+                        <button iconControl class="btn btn-outline-secondary d-flex justify-content-between w-100 align-items-center" (click)="addShoppingCart(b)">
+                          <span>{{b.price.value | trCurrency}} {{b.price.currency}}</span>
+                          <i class="fa-solid fa-cart-shopping"></i>
+                        </button>
+                      </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>

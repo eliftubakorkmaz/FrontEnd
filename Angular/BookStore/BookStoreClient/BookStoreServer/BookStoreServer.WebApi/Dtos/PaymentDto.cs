@@ -8,4 +8,5 @@ public sealed record PaymentDto(
   PaymentCard PaymentCard,
   Buyer Buyer,
   Address ShippingAddress,
-  Address BillingAddress);
+  Address BillingAddress,
+  int UserId);

@@ -1,28 +1,48 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { PaymentModel } from '../models/payment.model';
+import { AuthService } from './auth.service';
+import { SetShoppingCartsModel } from '../models/set-shopping-cart.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingCartService {
-
   shoppingCarts: any[] = [];
-  prices: {value: number, currency: string}[] = [];
+  prices: { value: number, currency: string }[] = [];
   count: number = 0;
   total: number = 0;
+  isLoading: boolean = false;
+
   constructor(
-    public shopping: ShoppingCartService,
-    private http: HttpClient,
+     private http: HttpClient,
+     private auth: AuthService
   ) {
-    if(localStorage.getItem("shoppingCarts")){
+   }
+   
+   checkLocalStoreForShoppingCarts(){
+    const shoppingCartString = localStorage.getItem("shoppingCarts");
+    if(shoppingCartString){
       const carts: string | null = localStorage.getItem("shoppingCarts")
       if(carts !== null){
-        this.shoppingCarts = JSON.parse(carts);
-        this.count = this.shoppingCarts.length;
+        this.shoppingCarts = JSON.parse(carts);    
       }
+    } else {
+      this.shoppingCarts = [];
     }
+
+    if(localStorage.getItem("response")){
+      this.http.get<SetShoppingCartsModel[]>("http://localhost:5051/api/ShoppingCarts/GetAll" + this.auth.userId).subscribe(res => {
+        this.shoppingCarts = res
+        this.calcTotal();
+      })
+    }
+
+    this.calcTotal();
    }
+
    calcTotal(){
+    this.count = this.shoppingCarts.length;
     this.total = 0;
     for(let s of this.shoppingCarts){
       this.total += s.price.value;
@@ -30,17 +50,27 @@ export class ShoppingCartService {
    }
 
    removeByIndex(index: number){
-    this.shoppingCarts.splice(index, 1);
-    localStorage.setItem("shopppingCarts", JSON.stringify(this.shoppingCarts));
-    this.count = this.shoppingCarts.length;
-    this.calcTotal();
+    if(localStorage.getItem("response")){
+        this.http.get("http://localhost:5051/api/ShoppingCarts/RemoveById" + this.shoppingCarts[index]?.shoppingCartId).subscribe(res => {
+          this.checkLocalStoreForShoppingCarts();
+        })
+    } else {
+      this.shoppingCarts.splice(index, 1);
+      localStorage.setItem("shopppingCarts", JSON.stringify(this.shoppingCarts));
+      this.count = this.shoppingCarts.length;
+      this.calcTotal();
+    }
    }
 
-   payment(currency: string){
-    const newList = this.shoppingCarts.filter(p => p.price.currency === currency);
-    this.http.post("http://localhost:5051/api/ShoppingCarts/Payment", {book: this.shoppingCarts})
-    .subscribe(res =>{
-
+   payment(data: PaymentModel, callBack: (res:any)=> void){
+    this.http.post("http://localhost:5051/api/ShoppingCarts/Payment", data)
+    .subscribe({
+      next: (res:any) => {
+        callBack(res);
+      },
+      error: (err: HttpErrorResponse) => {
+        console.log(err);
+      }
     })
    }
 }
