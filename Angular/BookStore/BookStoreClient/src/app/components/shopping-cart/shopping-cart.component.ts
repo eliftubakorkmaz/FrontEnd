@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { PaymentModel } from '../../models/payment.model';
 import { Cities, Countries } from '../../constants/address';
+import { AuthService } from '../../services/auth.service';
+import { ErrorService } from '../../services/error.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -22,8 +24,10 @@ export class ShoppingCartComponent {
   cardNumber4: string = "0016";
   expireMonthAndYear: string = "2026-06"; 
   constructor(
-    public shopping: ShoppingCartService
-  ) {
+    public shopping: ShoppingCartService,
+    private auth: AuthService,
+    private error: ErrorService
+    ) {
 
     this.request.books = this.shopping.shoppingCarts;
     this.shopping.calcTotal();
@@ -40,6 +44,7 @@ export class ShoppingCartComponent {
     this.request.buyer.registrationAddress = this.request.shippingAddress.description;
     this.request.buyer.city = this.request.shippingAddress.city;
     this.request.buyer.country = this.request.shippingAddress.country;
+    this.request.userId = this.auth.userId;
     this.shopping.payment(this.request, (res) => {
       const btn = document.getElementById("paymentModalCloseBtn");
       btn?.click();

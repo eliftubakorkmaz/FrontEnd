@@ -57,8 +57,8 @@ public sealed class BooksController : ControllerBase
                           .Select(s => s.Category.Name)
                           .ToList();
 
-      var raiting = _context.Orders.Where(p => p.BookId == book.Id && p.Raiting != null).Average(p => p.Raiting);
-      bookDto.Raiting = (short)(raiting == null ? 0 : Convert.ToInt16(Math.Round((decimal)raiting)));
+      //var raiting = _context.Orders.Where(p => p.BookId == book.Id && p.Raiting != null).Average(p => p.Raiting);
+      //bookDto.Raiting = (short)(raiting == null ? 0 : Convert.ToInt16(Math.Round((decimal)raiting)));
       requestDto.Add(bookDto);
     }
 

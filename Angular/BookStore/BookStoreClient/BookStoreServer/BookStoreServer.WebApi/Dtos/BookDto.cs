@@ -18,4 +18,6 @@ public class BookDto
   public DateTime CreateAt { get; set; } = DateTime.Now;
   public List<string> Categories { get; set; }
 
+  public short Raiting { get; set; }
+
 }

@@ -19,6 +19,49 @@ namespace BookStoreServer.WebApi.Controllers;
 public sealed class ShoppingCartsController : ControllerBase
 {
   private readonly AppDbContext _context;
+  private readonly IyzicoOptions _iyzicoOptions;
+
+  [HttpPost]
+  public IActionResult Add(AddShoppingCartDto request)
+  {
+    Book book = _context.Books.Find(request.BookId);
+    if (book is null)
+    {
+      throw new Exception("Kitap bulunmadı!");
+    }
+
+    if (book.Quantity < request.Quantity)
+    {
+      throw new Exception("Kitap stokta kalmadı!");
+    }
+
+    ShoppingCart cart =
+        _context.ShoppingCarts
+        .Where(p => p.BookId == request.BookId)
+        .FirstOrDefault();
+
+    if (cart is not null)
+    {
+      cart.Quantity += 1;
+
+      _context.Update(cart);
+    }
+    else
+    {
+      cart = new()
+      {
+        BookId = request.BookId,
+        Price = request.Price,
+        Quantity = 1,
+        UserId = request.UserId,
+      };
+
+      _context.Add(cart);
+    }
+
+    _context.SaveChanges();
+    return NoContent();
+  }
 
   [HttpGet("{id}")]
   public IActionResult RemoveById(int id)
@@ -33,6 +76,7 @@ public sealed class ShoppingCartsController : ControllerBase
 
     return NoContent();
   }
+
 
   [HttpGet("{userId}")]
   public IActionResult GetAll(int userId)

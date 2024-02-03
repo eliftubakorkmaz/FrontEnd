@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { PaymentModel } from '../models/payment.model';
 import { AuthService } from './auth.service';
 import { SetShoppingCartsModel } from '../models/set-shopping-cart.model';
+import { ErrorService } from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,12 @@ export class ShoppingCartService {
   count: number = 0;
   total: number = 0;
   isLoading: boolean = false;
+  error: any;
 
   constructor(
      private http: HttpClient,
-     private auth: AuthService
+     private auth: AuthService,
+     private err: ErrorService
   ) {
    }
    
@@ -32,10 +35,15 @@ export class ShoppingCartService {
     }
 
     if(localStorage.getItem("response")){
-      this.http.get<SetShoppingCartsModel[]>("http://localhost:5051/api/ShoppingCarts/GetAll" + this.auth.userId).subscribe(res => {
+      this.http.get<SetShoppingCartsModel[]>("http://localhost:5051/api/ShoppingCarts/GetAll" + this.auth.userId).subscribe({
+        next: (res:any) => {
         this.shoppingCarts = res
         this.calcTotal();
-      })
+        },
+        error: (err:HttpErrorResponse) => {
+          this.error.errorHandler(err);
+        }
+      });
     }
 
     this.calcTotal();
@@ -53,7 +61,7 @@ export class ShoppingCartService {
     if(localStorage.getItem("response")){
         this.http.get("http://localhost:5051/api/ShoppingCarts/RemoveById" + this.shoppingCarts[index]?.shoppingCartId).subscribe(res => {
           this.checkLocalStoreForShoppingCarts();
-        })
+        });
     } else {
       this.shoppingCarts.splice(index, 1);
       localStorage.setItem("shopppingCarts", JSON.stringify(this.shoppingCarts));
@@ -69,8 +77,8 @@ export class ShoppingCartService {
         callBack(res);
       },
       error: (err: HttpErrorResponse) => {
-        console.log(err);
+        this.error.errorHandler(err);
       }
-    })
+    });
    }
 }

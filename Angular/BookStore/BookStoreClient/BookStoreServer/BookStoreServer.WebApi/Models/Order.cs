@@ -19,6 +19,7 @@ public sealed class Order
   public DateTime PaymentDate { get; set; }
   public string PaymentType { get; set; }
   public string PaymentNumber { get; set; }
+  public long Raiting { get; set; }
 
   public static string GetNewOrderNumber()
   {
