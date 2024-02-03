@@ -75,7 +75,7 @@
 <div class="row mt-4"  *ngIf="!isLoading">
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header" id="categories">
                 <h6> {{ 'Categories' | translate }}</h6>
             </div>
             <div class="card-body">
@@ -97,7 +97,7 @@
         </div>
     </div>
     <div class="col-lg-9 col-md-8 col-sm-6 col-12">
-        <div class="input-group">
+        <div class="input-group mb-3" id="bookSearch">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa-solid fa-magnifying-glass"></i>
           </span>
@@ -110,7 +110,7 @@
           placeholder=" {{ 'Search' | translate}}">
         </div>
         <div class="row">
-            <div class="col-xl-4 col-md-6 col-12 mb-3" zoom *ngFor="let b of books">
+            <div class="col-xl-4 col-md-6 col-12 mb-3" id="book{{i}}" zoom *ngFor="let b of books let i = index">
               <div class="card text-center">
                 <div class="card-body">
                   <img [src]="b.coverImageUrl" class="card-img-top mt-2" alt="...">
@@ -118,17 +118,10 @@
                 <div class="card-header text-center">
                       <h5 #title id="title" class="card-title">{{ b.title }}</h5>
                       <p>{{ b.author }}</p>
-                      <div class="card-body">
-                        <ul>
-                          <li *ngFor="let category of b.categories">
-                            {{category}}
-                          </li>
-                        </ul>
-                      </div>
                       <div class="card-body detail">
                         <p class="card-text">{{ b.summary }}</p>
-                        <button iconControl class="btn btn-outline-secondary d-flex justify-content-between w-100 align-items-center" (click)="addShoppingCart(b)">
-                          <span>{{b.price.value | trCurrency}} {{b.price.currency}}</span>
+                        <button iconControl id="addShoppingCartBtn{{i}}" class="btn btn-outline-secondary d-flex justify-content-between w-100 align-items-center" (click)="addShoppingCart(b)">
+                          <span>{{b.price.value | currency:'':'':'1.2-2'}} {{b.price.currency}}</span>
                           <i class="fa-solid fa-cart-shopping"></i>
                         </button>
                       </div>

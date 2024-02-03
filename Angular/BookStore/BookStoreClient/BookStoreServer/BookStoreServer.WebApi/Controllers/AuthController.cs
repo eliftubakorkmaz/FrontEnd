@@ -21,16 +21,16 @@ public sealed class AuthController : ControllerBase
   [HttpPost]
   public IActionResult Register(RegisterDto request)
   {
-    //UserModel user = new()
-    //{
-    //    Email = request.Email,
-    //    Lastname = request.Lastname,
-    //    Name = request.Name,
-    //    Password = request.Password,
-    //    Username = request.Username,
-    //};
+    UserModel user = new()
+    {
+      Email = request.Email,
+      Lastname = request.Lastname,
+      Name = request.Name,
+      Password = request.Password,
+      Username = request.Username,
+    };
 
-    UserModel user = _mapper.Map<UserModel>(request);
+    UserModel User = _mapper.Map<UserModel>(request);
 
     _context.Add(user);
     _context.SaveChanges();

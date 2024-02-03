@@ -1,2 +1,11 @@
 <app-navbar></app-navbar>
 <router-outlet></router-outlet>
+<div class="popup bg-success-subtle" *ngIf="isPopupShow"> 
+    <p class="w-75 text-center">Sitemizin nasıl kullanıldığını keşfetmek ister misiniz?</p>
+    <button class="btn btn-outline-secondary"  (click)="showDriver()">
+        <i class="fa-solid fa-lightbulb"></i> Keşfet
+    </button>
+      <div class="progress mt-3" role="progressbar" aria-label="Success striped example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar progress-bar-striped bg-success" [ngStyle]="{width: processBar + '%'}"></div>
+      </div>
+</div>
