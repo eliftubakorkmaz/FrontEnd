@@ -16,7 +16,7 @@ constructor(
 
 signUp(form: NgForm){
   if(form.valid){
-    this.http.post("https://localhost:5051/api/Auth/Register", {
+    this.http.post("http://localhost:5051/api/Auth/Register", {
       name: form.controls["name"].value,
       lastname: form.controls["lastname"].value,
       username: form.controls["username"].value,

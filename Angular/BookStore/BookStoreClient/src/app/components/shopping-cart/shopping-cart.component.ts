@@ -4,6 +4,9 @@ import { PaymentModel } from '../../models/payment.model';
 import { Cities, Countries } from '../../constants/address';
 import { AuthService } from '../../services/auth.service';
 import { ErrorService } from '../../services/error.service';
+import { HttpClient } from '@angular/common/http';
+import { SwalService } from '../../services/swal.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -26,7 +29,10 @@ export class ShoppingCartComponent {
   constructor(
     public shopping: ShoppingCartService,
     private auth: AuthService,
-    private error: ErrorService
+    private error: ErrorService,
+    private http: HttpClient,
+    private translate: TranslateService,
+    private swal: SwalService
     ) {
 
     this.request.books = this.shopping.shoppingCarts;
@@ -50,7 +56,7 @@ export class ShoppingCartComponent {
       btn?.click();
       localStorage.removeItem("shoppingCarts");
       this.shopping.shoppingCarts = [];
-      this.shopping.checkLocalStoreForShoppingCarts();
+      this.shopping.getAllShoppingCarts();
     })
   }
 

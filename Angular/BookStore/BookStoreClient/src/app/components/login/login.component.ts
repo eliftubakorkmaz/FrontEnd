@@ -42,9 +42,9 @@ export class LoginComponent {
           request.push(cart);
         }
 
-      this.http.post("https://localhost:5051/api/ShoppingCarts/SetShoppingCartsFromLocalStorage", request).subscribe(res => {
+      this.http.post("http://localhost:5051/api/ShoppingCarts/SetShoppingCartsFromLocalStorage", request).subscribe(res => {
       localStorage.removeItem("shoppingCarts");
-      //this.shoppingCart.getAllShoppingCarts();
+      this.shoppingCart.getAllShoppingCarts();
       });
     }
 

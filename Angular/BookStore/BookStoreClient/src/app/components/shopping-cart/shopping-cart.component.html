@@ -21,19 +21,26 @@
                     <div class="col-2 text-center">
                         <img [src]="s.coverImageUrl" alt="" class="card-image">
                     </div>
-                    <div class="col-7">
+                    <div class="col-lg-4 col-10">
                         <div class="form-group">
-                            <b>{{'bookName' | translate}}</b>: {{s.title}}
+                            <b>{{'bookName' | translate }}</b>: {{s.title}}
                         </div>
                         <div class="form-group">
-                            <b>{{'author' | translate}}</b>: {{s.author}}
+                            <b>{{'author' | translate }}</b>: {{s.author}}
                         </div>
                         <div class="form-group">
-                            <b>{{'summary' | translate}}</b>: {{s.summary}}
+                            <b>{{'summary' | translate }}</b>: {{s.summary}}
                         </div>
                     </div>
-                    <div class="col-3 text-center d-flex justify-content-center">
-                        <h5>{{s.price.value | trCurrency}} {{s.price.currency}}</h5>
+                    <div class="col-lg-3 col-12">
+                        <div>
+                            <button class="btn btn-danger" (click)="shopping.changeBookQuantityInShoppingCart(s.id,s.quantity-1)">-</button>
+                            <p [innerHtml]="s.quantity" class="alert alert-warning"></p>
+                            <button class="btn btn-success" (click)="shopping.changeBookQuantityInShoppingCart(s.id,s.quantity+1)">+</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-12 text-center d-flex justify-content-center">
+                        <h5>{{s.price.value | trCurrency }} {{s.price.currency}}</h5>
                     </div>
                     <i class="fa fa-trash trash" (click)="shopping.removeByIndex(i)"></i>
                 </div>
@@ -41,10 +48,10 @@
         </div>
     </div>
     <div class="col-lg-3 col-12">
-        <div class="card">
+        <div class="card mt-1" *ngFor="let p of shopping.prices">
             <div class="form-group">
                 <h1 class="alert alert-danger text-center">
-                    {{shopping.total | trCurrency}} ₺
+                    {{shopping.total | trCurrency }} ₺
                 </h1>
             </div>
             <div class="form-group">

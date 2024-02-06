@@ -7,19 +7,24 @@ namespace BookStoreServer.WebApi.Models;
 public sealed class Order
 {
   public int Id { get; set; }
-  public int Quantity { get; set; }
-  public string OrderNumber { get; set; }
+  public string OrderNumber { get; set; } //16 hane ve unique olacak TNR2023000000001
 
   [ForeignKey("Book")]
   public int BookId { get; set; }
-  public int UserId { get; set; }
-  public Book Books { get; set; }
+
+  public Book Book { get; set; }
+  public int Quantity { get; set; }
+
+  public int? UserId { get; set; }
+
   public Money Price { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime PaymentDate { get; set; }
   public string PaymentType { get; set; }
   public string PaymentNumber { get; set; }
-  public long Raiting { get; set; }
+
+  public string Comment { get; set; }
+  public short? Raiting { get; set; }
 
   public static string GetNewOrderNumber()
   {

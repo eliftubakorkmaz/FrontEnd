@@ -1,84 +1,148 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { SwalService } from './swal.service';
+import { TranslateService } from '@ngx-translate/core';
+import { forkJoin } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { PaymentModel } from '../models/payment.model';
 import { AuthService } from './auth.service';
-import { SetShoppingCartsModel } from '../models/set-shopping-cart.model';
 import { ErrorService } from './error.service';
+import { SetShoppingCartsModel } from '../models/set-shopping-cart.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingCartService {
+
   shoppingCarts: any[] = [];
   prices: { value: number, currency: string }[] = [];
   count: number = 0;
   total: number = 0;
   isLoading: boolean = false;
-  error: any;
 
   constructor(
-     private http: HttpClient,
-     private auth: AuthService,
-     private err: ErrorService
+    private swal: SwalService,
+    private translate: TranslateService,
+    private http: HttpClient,
+    private auth: AuthService,
+    private error: ErrorService,
   ) {
-   }
-   
-   checkLocalStoreForShoppingCarts(){
-    const shoppingCartString = localStorage.getItem("shoppingCarts");
-    if(shoppingCartString){
+    this.getAllShoppingCarts();
+  }
+
+  changeBookQuantityInShoppingCart(bookId: number, quantity: number){
+    if(localStorage.getItem("response")){
+      this.http.get(`http://localhost:7082/api/ShoppingCarts/ChangeBookQuantityInShoppingCart/${bookId}/${quantity}`)
+      .subscribe({
+        next: (res:any)=> {
+          this.getAllShoppingCarts();
+        },
+        error: (err:HttpErrorResponse)=> {
+          this.error.errorHandler(err);
+        }
+      })
+    }else{
+      if(quantity <= 0){
+        const index = this.shoppingCarts.findIndex(p=> p.id == bookId);
+        this.removeByIndex(index);
+      }else{
+        this.http.get(`http://localhost:7082/api/ShoppingCarts/CheckBookQuantityIsAvailable/${bookId}/${quantity}`).subscribe({
+          next: (res:any)=> {
+            this.shoppingCarts.filter(p=> p.id === bookId)[0].quantity = quantity;
+          },
+          error: (err: HttpErrorResponse)=> {
+            this.error.errorHandler(err);
+          }
+        })       
+      }      
+    }
+    
+  }
+
+  getAllShoppingCarts(){
+    const shoppingCartsString = localStorage.getItem("shoppingCarts");
+    if (shoppingCartsString) {
       const carts: string | null = localStorage.getItem("shoppingCarts")
-      if(carts !== null){
-        this.shoppingCarts = JSON.parse(carts);    
+      if (carts !== null) {
+        this.shoppingCarts = JSON.parse(carts);
+        this.calcTotal();
       }
-    } else {
+    }else{
       this.shoppingCarts = [];
     }
 
     if(localStorage.getItem("response")){
-      this.http.get<SetShoppingCartsModel[]>("http://localhost:5051/api/ShoppingCarts/GetAll" + this.auth.userId).subscribe({
-        next: (res:any) => {
-        this.shoppingCarts = res
+      this.http.get<SetShoppingCartsModel[]>("http://localhost:7082/api/ShoppingCarts/GetAll/" + this.auth.userId,).subscribe({
+        next: (res: any)=> {
+          this.shoppingCarts =  res
         this.calcTotal();
         },
-        error: (err:HttpErrorResponse) => {
+        error: (err: HttpErrorResponse)=> {
           this.error.errorHandler(err);
         }
       });
     }
 
     this.calcTotal();
-   }
+  }
 
-   calcTotal(){
+  calcTotal() {
     this.count = this.shoppingCarts.length;
     this.total = 0;
-    for(let s of this.shoppingCarts){
-      this.total += s.price.value;
-    }
-   }
 
-   removeByIndex(index: number){
-    if(localStorage.getItem("response")){
-        this.http.get("http://localhost:5051/api/ShoppingCarts/RemoveById" + this.shoppingCarts[index]?.shoppingCartId).subscribe(res => {
-          this.checkLocalStoreForShoppingCarts();
-        });
-    } else {
-      this.shoppingCarts.splice(index, 1);
-      localStorage.setItem("shopppingCarts", JSON.stringify(this.shoppingCarts));
-      this.count = this.shoppingCarts.length;
-      this.calcTotal();
-    }
-   }
+    const sumMap = new Map<string, number>();
 
-   payment(data: PaymentModel, callBack: (res:any)=> void){
-    this.http.post("http://localhost:5051/api/ShoppingCarts/Payment", data)
+    this.prices = [];
+    for (let s of this.shoppingCarts) {
+      const newPrice = {value: (s.price.value * s.quantity), currency: s.price.currency};
+      this.prices.push({ ...newPrice });
+    }
+
+    for (const item of this.prices) {
+      const currentSum = sumMap.get(item.currency) || 0;
+      sumMap.set(item.currency, currentSum + item.value);
+    }
+
+    this.prices = [];
+    for (const [currency, sum] of sumMap) {
+      this.prices.push({ value: sum, currency: currency });
+    }
+
+  }
+
+  removeByIndex(index: number) {
+
+    forkJoin({
+      doYouWantToDeleted: this.translate.get("remove.doYouWantToDeleted"),
+      cancelBtn: this.translate.get("remove.cancelBtn"),
+      confirmBtn: this.translate.get("remove.confirmBtn")
+    }).subscribe(res => {
+      this.swal.callSwal(res.doYouWantToDeleted, res.cancelBtn, res.confirmBtn, () => {
+        if(localStorage.getItem("response")){
+          this.http.get("http://localhost:7082/api/ShoppingCarts/RemoveById/" + this.shoppingCarts[index]?.shoppingCartId).subscribe(res=> {
+
+            this.getAllShoppingCarts();
+          });
+        }else{
+          this.shoppingCarts.splice(index, 1);
+          localStorage.setItem("shoppingCarts", JSON.stringify(this.shoppingCarts));
+          this.count = this.shoppingCarts.length;
+          this.calcTotal();
+        }
+       
+      });
+    })
+
+  }
+
+  payment(data:PaymentModel, callBack: (res: any)=> void){
+    this.http.post("http://localhost:7082/api/ShoppingCarts/Payment", data)
     .subscribe({
-      next: (res:any) => {
+      next: (res:any)=> { 
         callBack(res);
       },
-      error: (err: HttpErrorResponse) => {
+      error: (err: HttpErrorResponse)=> {
         this.error.errorHandler(err);
       }
-    });
-   }
+    })
+  }
 }

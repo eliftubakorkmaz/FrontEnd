@@ -50,7 +50,7 @@ export class HomeComponent {
       data.userId = this.auth.userId;
       this.http.post("http://localhost:5051/api/ShoppingCarts/Add", book).subscribe({
        next: (res:any) => {
-        this.shopping.checkLocalStoreForShoppingCarts();
+        this.shopping.getAllShoppingCarts();
         this.translate.get("addBookInShoppingCartIsSuccessful").subscribe(res => {
         this.swal.callToast(res);
         })
@@ -60,8 +60,26 @@ export class HomeComponent {
        }
       });
     }else {
-      this.shopping.shoppingCarts.push(book);
-      localStorage.setItem("shoppingCarts",JSON.stringify(this.shopping.shoppingCarts));
+      if(book?.quantity < 1){
+        this.translate.get("bookQuantityIsNotEnough").subscribe(res=> {
+        this.swal.callToast(res, "error");
+        });
+      } else {
+        const checkBookIsAlreadyExists = this.shopping.shoppingCarts.filter(p => p.id == book.id)[0];
+
+        if(checkBookIsAlreadyExists !== null){
+          this.shopping.shoppingCarts.filter(p => p.id == book.id)[0].quantity +=1;
+        }else {
+          const newBook ={...book};
+          newBook.quantity = 1;
+          this.shopping.shoppingCarts.push(newBook);
+        }
+        this.shopping.calcTotal();
+        localStorage.setItem("shoppingCarts",JSON.stringify(this.shopping.shoppingCarts));
+        this.translate.get("addBookInShoppingCartIsSuccessful").subscribe(res => {
+        this.swal.callToast(res);
+        });
+      }
     }
   }
 

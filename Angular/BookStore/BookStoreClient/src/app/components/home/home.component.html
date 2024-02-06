@@ -89,7 +89,7 @@
                 class="form-control"
                 placeholder=" {{ 'Search' | translate}}">
               </div>
-                <ul class="categories">
+                <ul class="categories"  style="max-height: 500px;overflow: auto;">
                   <li class="category" (click)="changeCategory(null)" [ngClass]="request.categoryId === null ? 'active' : ''">{{ 'All Categories' | translate}}</li>
                   <li class="category" (click)="changeCategory(c.id)" [ngClass]="request.categoryId === c.id ? 'active' : ''" *ngFor="let c of categories | categoryPipe: searchCategories">{{c.name |  translate}}</li>
                 </ul>
@@ -107,7 +107,7 @@
           (search)="getAll()"
           type="search" 
           class="form-control" 
-          placeholder=" {{ 'Search' | translate}}">
+          placeholder=" {{ 'Search' | translate }}">
         </div>
         <div class="row">
             <div class="col-xl-4 col-md-6 col-12 mb-3" id="book{{i}}" zoom *ngFor="let b of books let i = index">
@@ -118,9 +118,22 @@
                 <div class="card-header text-center">
                       <h5 #title id="title" class="card-title">{{ b.title }}</h5>
                       <p>{{ b.author }}</p>
-                      <div class="card-body detail">
-                        <p class="card-text">{{ b.summary }}</p>
-                        <button iconControl id="addShoppingCartBtn{{i}}" class="btn btn-outline-secondary d-flex justify-content-between w-100 align-items-center" (click)="addShoppingCart(b)">
+                      <ul class="d-flex list-unstyled justify-content-center">
+                        <li *ngFor="let c of b.categories">{{c}}</li>
+                      </ul>
+                      <div>
+                        <i class="fa-star cursor font-size-lg" [ngClass]="b.raiting >= 1 ? 'fa-solid text-warning' : 'fa-regular'"></i>
+                        <i class="fa-star cursor font-size-lg" [ngClass]="b.raiting >= 2 ? 'fa-solid text-warning' : 'fa-regular'"></i>
+                        <i class="fa-star cursor font-size-lg" [ngClass]="b.raiting >= 3 ? 'fa-solid text-warning' : 'fa-regular'"></i>
+                        <i class="fa-star cursor font-size-lg" [ngClass]="b.raiting >= 4 ? 'fa-solid text-warning' : 'fa-regular'"></i>
+                        <i class="fa-star cursor font-size-lg" [ngClass]="b.raiting >= 5 ? 'fa-solid text-warning' : 'fa-regular'"></i>
+                      </div>
+                      <div class="card-body">
+                        <button *ngIf="b.quantity <= 0" class="btn btn-danger text-center w-100" disabled type="button">
+                          <i class="fa-regular fa-hourglass me-2"></i>
+                          <span>{{'bookQuantityIsNotEnough' | translate}}</span>
+                        </button>
+                        <button *ngIf="b.quantity > 0"  iconControl id="addShoppingCartBtn{{i}}" class="btn btn-outline-secondary d-flex justify-content-between w-100 align-items-center" (click)="addShoppingCart(b)">
                           <span>{{b.price.value | currency:'':'':'1.2-2'}} {{b.price.currency}}</span>
                           <i class="fa-solid fa-cart-shopping"></i>
                         </button>
