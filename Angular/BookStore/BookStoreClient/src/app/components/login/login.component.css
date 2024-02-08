@@ -47,8 +47,8 @@ img{
 }
 
 .login__img img{
-  width: 250px;
-  margin-top: 1.3rem;
+  width: 310px;
+  margin-top: 1.5rem;
 }
 
 .login__forms{
@@ -129,11 +129,16 @@ img{
   display: block;
   padding: 1rem;
   margin: 1rem 0;
-  color: black;
+  background-color: #089DA1;
+  color: #FFF;
   font-weight: 600;
   text-align: center;
   border-radius: .5rem;
   transition: .3s;
+}
+
+.login__button:hover{
+  background-color: rgba(0, 0, 0, 0.56);
 }
 
 .login__account, .login__signin, .login__signup{

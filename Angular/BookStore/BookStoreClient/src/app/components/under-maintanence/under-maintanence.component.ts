@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-under-maintanence',
-  templateUrl: './under-maintanence.component.html',
-  styleUrl: './under-maintanence.component.css'
+    selector: 'app-under-maintanance',
+    templateUrl: './under-maintanence.component.html',
+    styleUrls: ['./under-maintanence.component.css'],
+    standalone: true,
+    imports: [TranslateModule]
 })
-export class UnderMaintanenceComponent {
+export class UnderMaintenanceComponent {
 
 }

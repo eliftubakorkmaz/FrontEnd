@@ -11,11 +11,11 @@ export class BookModel{
     isbn: string = "";
     createAt: string = "";
     categories: string[] = [];
-    shoppingCartId: number = 0;
+    shoppingCartId: number = 0;    
     raiting: number = 0;
 }
 
-export class Money {
+export class Money{
     value: number = 0;
     currency: string = "₺";
 }

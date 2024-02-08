@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class AuthService {
   token: string = "";
-  userId: number = 0;
+  userId: number | null = 0;
   userName: string = "";
   constructor() { }
 
@@ -17,6 +17,8 @@ export class AuthService {
       this.userId = responseJson.userId;
       this.userName = responseJson.userName;
       return true;
+    }else{
+      this.userId = null;
     }
 
     return false;

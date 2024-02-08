@@ -1,46 +1,66 @@
-<nav class="navbar navbar-expand-lg bg-success-subtle bg-gradient bg-opacity-75">
-    <div class="container-fluid">
-      <a class="navbar-brand fs-4" routerLink="/">{{ 'Elo Book Store' | translate }}</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page">
-              <i class="fa-solid fa-lightbulb"></i>
-            </a>
+<section>
+  <nav>
+      <a routerLink="/" data-after="home">
+          <li>
+              <div class="logo" data-after="home">
+                  <img src="/assets/image/logo.png">
+                  <h4 style="color:black">{{'navbar.myBookStore' | translate}}</h4>
+              </div>
           </li>
-          <li class="nav-item">
-            <a *ngIf="auth.isAuthentication()" class="nav-link" aria-current="page" routerLink="/orders">
-              {{'orders' | translate}}
-            </a>
-          </li>
-        </ul>
-        <select class="btn btn-outline-light btn-sm text-dark" id="language" (change)="switchLanguage($event)">
-          <option value="en">English</option>
-          <option value="tr">Türkçe</option>
-        </select>
-        <button routerLink="/shopping-cart" class="btn btn-outline-light btn-sm text-dark ms-3">
-          <i class="fa-solid fa-cart-shopping" [ngClass]="shopping.shoppingCarts.length > 0 ? 'fa-bounce' : ''"></i>
-          <span *ngIf="shopping.shoppingCarts.length > 0" class="position-absolute translate-middle badge rounded-pill bg-danger" style="top: 42px;right: 25px;">
-            {{shopping.count}}
-            <span class="visually-hidden">unread messages</span>
-          </span>
-        </button>
-        <button *ngIf="!auth.isAuthentication()" class="btn btn-outline-light ms-2" routerLink="/login">
-          <i class="fa-solid fa-user-lock"></i>
-        </button>
-        <div class="dropdown ms-4" *ngIf="auth.isAuthentication()">
-          <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img width="30" src="https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Clipart.png" alt="">
-            {{auth.userName}}
-          </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Profilim</a></li>
-            <li><a class="dropdown-item" href="#" (click)="logout()">Çıkış Yap</a></li>
-          </ul>
-        </div>
+      </a>
+      <div id="search" class>
+          <input id="search-input" type="text" name="search_keyword" autocomplete="off" value
+              placeholder="{{'navbar.searchBookAuthor' | translate}}" class>
+          <div class="seach-tools">
+          </div>
+          <div id="search-btn">
+              <span class="fa-solid fa-magnifying-glass" style="margin-left: 10px;"></span>
+          </div>
+          <div class="search-panel-container.show" style="display: none;" id="search-panel-cr">
+              <div class="search-panel">
+                  <span class="close-button">
+                      <a><i class="fa-solid fa-xmark"></i></a>
+                  </span>
+              </div>
+              <div class="search-panel">
+                  <ul>
+                      <li class="fast-type-0.fast-type-multi"></li>
+                  </ul>
+              </div>
+          </div>
       </div>
-    </div>
+
+      <div class="buttons">
+          <div class="custom-select" style="height:50px; display: flex; align-items: center;" (click)="toggleSelect()">
+              <div class="selected-option" style="background-color: transparent;">
+                  <span>{{ selectedOption }}</span>
+              </div>
+              <div class="select-box" *ngIf="showOptions">
+                  <div class="select-option" *ngFor="let option of options" (click)="selectOption(option)">
+                      <img [src]="option.image" alt="language">
+                      <span>{{ option.text }} </span>
+                  </div>
+              </div>
+          </div>
+
+          <div routerLink="/login" class="user-button" style="border-radius: 50%; transition: 0.5s; padding: 10px;">
+              <div class="burger-menu" style="padding: 5px;">
+                  <i class="fa-regular fa-user" style="font-size: 1.6em; cursor: pointer; font-weight: 550;"></i>
+              </div>
+          </div>
+          <div routerLink="/orders" class="user-button" style="border-radius: 50%; transition: 0.5s; padding: 10px;">
+              <div class="burger-menu" style="padding: 5px;">
+                  <i class="fa-regular fa-user" style="font-size: 1.6em; cursor: pointer; font-weight: 550;"></i>
+              </div>
+          </div>
+          <div routerLink="/shopping-cart" class="user-button" style="border-radius: 50%; transition: 0.5s; padding:10px;">
+              <div class="burger-menu" style="padding: 5px;">
+                  <i class="fa-solid fa-cart-shopping"
+                      style="font-size: 1.6em; cursor: pointer; font-weight: 550;"></i>
+              </div>
+          </div>
+      </div>
   </nav>
+
+
+</section>

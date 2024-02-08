@@ -9,4 +9,4 @@ public sealed record PaymentDto(
   Buyer Buyer,
   Address ShippingAddress,
   Address BillingAddress,
-  int UserId);
+  int? UserId = null);

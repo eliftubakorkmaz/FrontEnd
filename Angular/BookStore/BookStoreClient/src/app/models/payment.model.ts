@@ -1,7 +1,7 @@
 import { BookModel } from "./book.model";
 
 export class PaymentModel {
-    userId: number = 0;
+    userId: number | null = 0;
     books: BookModel[] = []
     buyer: BuyerModel = new BuyerModel();
     shippingAddress: AddressModel = new AddressModel();
